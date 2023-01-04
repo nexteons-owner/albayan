@@ -1,20 +1,20 @@
 import _ from "lodash";
 import { createTheme, Theme } from "@mui/material/styles";
 
-import typography from "./Typography";
-import components from "./Override";
-import shadows from "./Shadows";
+import typography from "./typography";
+import components from "./override";
+import shadows from "./shadows";
 
 // ##############################import {
-import {
-  BLUE_THEME,
-  GREEN_THEME,
-  RED_THEME,
-  BLACK_THEME,
-  PURPLE_THEME,
-  INDIGO_THEME,
-  ORANGE_THEME,
-} from "./ThemeConstants";
+  import {
+    BLUE_THEME,
+    GREEN_THEME,
+    RED_THEME,
+    BLACK_THEME,
+    PURPLE_THEME,
+    INDIGO_THEME,
+    ORANGE_THEME,
+  } from "./themeConstants";
 
 const SidebarWidth = 265;
 const TopbarHeight = 70;
