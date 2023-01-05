@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
-import { Container, Alert, AlertTitle } from '@mui/material';
-import { STORE_OWNER, SUPER_ADMIN } from './constants';
-import useAuth from '../hooks/useAuth';
-import { getOperationalRole, isExistInDir } from '../utils/constants/ui/permissionTree';
+import PropTypes from "prop-types";
+import { Container, Alert, AlertTitle } from "@mui/material";
+import useAuth from "../../auth/useAuth";
+import { getOperationalRole, isExistInDir } from "../../utils/permission";
 
-export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
 // ----------------------------------------------------------------------
 
-RoleBasedGuard.propTypes = {
-  accessibleRoles: PropTypes.array, // Example ['admin', 'leader']
-  children: PropTypes.node
-};
-
-export default function RoleBasedGuard({ accessibleRoles, children }) {
+interface RoleBasedGuard {
+  children: React.ReactNode;
+  accessibleRoles: string[];
+}
+const RoleBasedGuard: React.FC<RoleBasedGuard> = ({
+  children,
+  accessibleRoles,
+}) => {
   const { user } = useAuth();
-  const permission = user?.permission || [];
+  const permission = user != null ? user?.permission : [];
 
   if (!isPermitted(accessibleRoles, permission)) {
     return (
@@ -28,29 +28,40 @@ export default function RoleBasedGuard({ accessibleRoles, children }) {
   }
 
   return <>{children}</>;
-}
+};
+export default RoleBasedGuard;
 
-export const isPermitted = (accessibleRoles, permission, locationOfCall) =>
+RoleBasedGuard.propTypes = {
+  accessibleRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired, // Example ['admin', 'leader']
+  children: PropTypes.node,
+};
+
+export const isPermitted = (
+  accessibleRoles: string[],
+  permission: string[] = [],
+  locationOfCall?: string
+) =>
   !accessibleRoles
     ? true
     : accessibleRoles?.length <= 0
     ? true
     : accessibleRoles
-        .map((aRole) => {
+        .map((aRole: string) => {
           if (permission?.length <= 0) {
             return false;
           }
           const aRoleData = getOperationalRole(aRole);
-          const aRoleParent = aRoleData.parent;
-          let aRoleoperation = '';
+          const aRoleParent: string = aRoleData.parent;
+          let aRoleoperation: string = "";
           if (aRoleData.isOperationalInclude) {
-            aRoleoperation = aRoleData.operations.at(0);
+            aRoleoperation = aRoleData.operations.at(0)!;
           }
 
           if (
             permission
-              ?.map((permissionItem) => {
-                const { parent, isOperationalInclude, operations } = getOperationalRole(permissionItem);
+              ?.map((permissionItem: string) => {
+                const { parent, isOperationalInclude, operations } =
+                  getOperationalRole(permissionItem);
                 if (aRoleData.isOperationalInclude) {
                   if (aRoleParent === parent) {
                     if (isOperationalInclude) {

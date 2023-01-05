@@ -1,32 +1,11 @@
-import { Button, Stack, TextField } from "@mui/material";
-import { useState } from "react";
+import Router from "./routes/router";
 import useAuth from "./global/auth/useAuth";
-import useNetwork from "./global/network/useNetwork";
-import "./App.css";
+import { Sspiner } from "./components/customUiControls";
 
 function App() {
-  const { login } = useAuth();
-  const { online } = useNetwork();
-  const [username, setUserName] = useState<string>("naifmed");
-  const [password, setPassword] = useState<string>("nmc@2018");
+  const { isInitialized } = useAuth();
 
-  return (
-    <Stack>
-      {username}
-      {online ? "online" : "offline"}
-      <TextField onChange={(e) => setUserName(e?.target?.value)} />
-      <TextField onChange={(e) => setPassword(e?.target?.value)} />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          login(username, password);
-        }}
-      >
-        submit
-      </Button>
-    </Stack>
-  );
+  return isInitialized ? <Router /> : <Sspiner />;
 }
 
 export default App;

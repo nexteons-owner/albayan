@@ -1,10 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router";
 
-const BlankLayout: React.FC = () => (
+const FullScreenLayout: React.FC = () => (
   <>
     <Outlet />
   </>
 );
 
-export default BlankLayout;
+export default FullScreenLayout;

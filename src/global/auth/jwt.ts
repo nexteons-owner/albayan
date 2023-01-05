@@ -13,7 +13,7 @@ const isValidToken = (accessToken: string) => {
   return decoded.exp > currentTime;
 };
 
-const setSession = (token: string, permissions: Array<String>) => {
+const setSession = (token: string, permissions: string[]) => {
   if (token) {
     Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions }));
   } else {

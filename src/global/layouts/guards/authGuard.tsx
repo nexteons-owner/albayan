@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router";
 import PropTypes from "prop-types";
 // hooks
-import useAuth from "../hooks/useAuth";
-import useNetwork from "../hooks/useNetwork";
+import useAuth from "../../auth/useAuth";
+import useNetwork from "../../network/useNetwork";
 // pages
-import Login from "../modules/authentication/Login";
+import Login from "../../../modules/authentication/Login";
 // import Nointernet from "../components/backdrops/Nointernet";
 
 // ----------------------------------------------------------------------
 
-AuthGuard.propTypes = {
-  children: PropTypes.node,
-};
+interface AuthGuard {
+  children: React.ReactNode;
+}
 
-export default function AuthGuard({ children }) {
+const AuthGuard: React.FC<AuthGuard> = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   const { online } = useNetwork();
   const { pathname } = useLocation();
-  const [requestedLocation, setRequestedLocation] = useState(null);
+
+  const [requestedLocation, setRequestedLocation] = useState("");
 
   if (!isAuthenticated) {
     if (pathname !== requestedLocation) {
@@ -27,8 +28,8 @@ export default function AuthGuard({ children }) {
     return <Login />;
   }
 
-  if (requestedLocation && pathname !== requestedLocation) {
-    setRequestedLocation(null);
+  if (requestedLocation != "" && pathname !== requestedLocation) {
+    setRequestedLocation("");
     return <Navigate to={requestedLocation} />;
   }
 
@@ -38,4 +39,9 @@ export default function AuthGuard({ children }) {
       {/* <Nointernet /> */}
     </div>
   );
-}
+};
+
+export default AuthGuard;
+AuthGuard.propTypes = {
+  children: PropTypes.node,
+};

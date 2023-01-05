@@ -5,15 +5,20 @@ import PropTypes from "prop-types";
 import { setSession, getAuthCredentials } from "./jwt";
 import { getUserByToken, login as loginService } from "../../services/user";
 
-const initialState = {
+const initialState: state = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null,
+  user: {},
 };
+interface user {
+  name?: string;
+  id?: string;
+  permission?: string[];
+}
 interface state {
   isAuthenticated?: boolean;
   isInitialized?: boolean;
-  user?: object;
+  user?: user;
 }
 interface action {
   payload?: any;

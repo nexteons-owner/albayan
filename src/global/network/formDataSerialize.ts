@@ -1,6 +1,6 @@
 export default function formDataSerialize(
   variables: object,
-  removeList: Array<String>
+  removeList: string[]
 ) {
   const formData = new FormData();
   buildFormData(formData, variables, removeList);
@@ -10,7 +10,7 @@ export default function formDataSerialize(
 function buildFormData(
   formData: FormData,
   data: any,
-  removeList: Array<String>,
+  removeList: string[],
   parentKey?: string
 ) {
   if (
