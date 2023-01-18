@@ -30,7 +30,6 @@ const responseHandler = (res: any) => {
           };
       }
     } else {
-      console.log(res && JSON.stringify(res));
       return { status: false, data: null, msg: "Contact Admin S100" };
     }
   } catch (error) {

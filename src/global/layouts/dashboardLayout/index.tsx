@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Sidebar from "./sidebar/Sidebar";
+// import Sidebar from "./sidebar/Sidebar";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import { TopbarHeight } from "../../theme";

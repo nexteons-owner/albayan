@@ -13,9 +13,9 @@ const isValidToken = (accessToken: string) => {
   return decoded.exp > currentTime;
 };
 
-const setSession = (token: string, permissions: string[]) => {
+const setSession = (token: string) => {
   if (token) {
-    Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions }));
+    Cookie.set(AUTH_CRED, JSON.stringify({ token }));
   } else {
     Cookie.remove(AUTH_CRED);
   }

@@ -201,9 +201,14 @@ const Login: React.FC = () => {
                     variant="contained"
                     size="large"
                     fullWidth
-                    onClick={() =>
-                      login(loginInfo.username, loginInfo.password)
-                    }
+                    onClick={() => {
+                      console.log("working");
+                      try {
+                        login(loginInfo.username, loginInfo.password);
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
                     sx={{
                       pt: "10px",
                       pb: "10px",

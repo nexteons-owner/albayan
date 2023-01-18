@@ -16,7 +16,7 @@ http.interceptors.request.use(
     const token = getAuthCredentials();
     config.headers = {
       ...config.headers,
-      Authorization: `${token}`,
+      Authorization: `Bearer ${token}`,
     };
     return config;
   },

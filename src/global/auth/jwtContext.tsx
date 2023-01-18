@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
+import { useMutation } from "react-query";
 
 // utils
 import { setSession, getAuthCredentials } from "./jwt";
@@ -65,6 +66,11 @@ AuthProvider.propTypes = {
 
 function AuthProvider({ children }: any): any {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    mutateAsync,
+    isLoading: isAddingUser,
+    error: addError,
+  } = useMutation(loginService);
 
   useEffect(() => {
     const initialize = async () => {
@@ -73,16 +79,16 @@ function AuthProvider({ children }: any): any {
         // return SSRCookie.parse(context.req.headers.cookie ?? "");
 
         if (accessToken && accessToken) {
-          setSession(accessToken, []);
-          const response: any = getUserByToken();
-          const resp = response.data.data;
-          const { userDetails } = resp;
-          const stateUser = {};
+          setSession(accessToken);
+          const response: any = await getUserByToken();
+          const { _userName: name, _userId: id } = response.data.data.userInfo;
+          const stateUser: user = { name, id, permission: [] };
+          console.log(stateUser);
           dispatch({
             type: "INITIALIZE",
             payload: {
               isAuthenticated: true,
-              user: { ...stateUser },
+              user: stateUser,
             },
           });
         } else {
@@ -111,34 +117,45 @@ function AuthProvider({ children }: any): any {
 
     initialize();
   }, []);
-
   const login = async (mobile: string, password: string) => {
-    const response = await loginService(mobile, password);
+    console.log("asdasd");
+    const response = await mutateAsync({
+      email: mobile,
+      password,
+    });
+    console.log("This was an async mutation!");
+    console.log("newUser: ", response);
 
     if (!response.status) {
       return response;
     }
-    console.log(response);
-    const { accessToken } = response?.data?.data?.userInfo;
+    try {
+      const {
+        accessToken,
+        _userName: name,
+        _userId: id,
+      } = response.data.data.userInfo;
 
-    if (accessToken !== undefined) {
-      setSession(accessToken, []);
-      const stateUser = {};
-      dispatch({
-        type: "LOGIN",
-        payload: {
-          user: { ...stateUser },
-        },
-      });
-    } else {
-      setSession("", []);
-      dispatch({ type: "LOGOUT" });
+      if (accessToken !== undefined) {
+        setSession(accessToken);
+        const stateUser: user = { name, id, permission: [] };
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user: { ...stateUser },
+          },
+        });
+      } else {
+        setSession("");
+        dispatch({ type: "LOGOUT" });
+      }
+    } catch (error) {
+      console.error(error);
     }
-    return response;
   };
 
   const logout = async () => {
-    setSession("", []);
+    setSession("");
     dispatch({ type: "LOGOUT" });
   };
 

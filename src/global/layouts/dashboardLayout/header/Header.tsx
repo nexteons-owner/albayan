@@ -14,6 +14,7 @@ import {
   Drawer,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import useAuth from "../../../auth/useAuth";
 
 import { StextField } from "../../../../components/customUiControls";
 // import userimg from "../../../assets/images/users/user2.jpg";
@@ -30,6 +31,7 @@ const Header = ({
   toggleMobileSidebar: React.MouseEventHandler<HTMLElement>;
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { logout } = useAuth();
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -52,7 +54,7 @@ const Header = ({
   // 4
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
-  const handleClick4 = (event:any) => {
+  const handleClick4 = (event: any) => {
     setAnchorEl4(event.currentTarget);
   };
 
@@ -474,24 +476,25 @@ const Header = ({
             </Box>
           </Box>
 
-          <Link
+          {/* <Link
             style={{
               textDecoration: "none",
             }}
             to="/auth/login"
+          > */}
+          <Button
+            sx={{
+              mt: 2,
+              display: "block",
+              width: "100%",
+            }}
+            variant="contained"
+            color="primary"
+            onClick={() => logout()}
           >
-            <Button
-              sx={{
-                mt: 2,
-                display: "block",
-                width: "100%",
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Logout
-            </Button>
-          </Link>
+            Logout
+          </Button>
+          {/* </Link> */}
         </Menu>
       </Toolbar>
     </AppBar>

@@ -2,11 +2,8 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { Typography, TypographyProps } from "@mui/material";
 
-interface Props extends TypographyProps {
-  htmlFor?: string;
-}
 
-const CustomFormLabel: React.FC<Props> = styled((props: Props) => (
+const CustomFormLabel: React.FC<any> = styled((props: any) => (
   <Typography
     variant="h6"
     {...props}
