@@ -14,7 +14,7 @@ const GuestGuard: React.FC<GuestGuard> = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={PATH_DASHBOARD.root} />;
+    return <Navigate to={PATH_DASHBOARD.dashboard.main} />;
   }
 
   return <>{children}</>;

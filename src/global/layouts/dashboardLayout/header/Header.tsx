@@ -31,7 +31,7 @@ const Header = ({
   toggleMobileSidebar: React.MouseEventHandler<HTMLElement>;
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -441,7 +441,7 @@ const Header = ({
                   ml: 1,
                 }}
               >
-                Julia
+                {user?.name}
               </Typography>
               {/* <FeatherIcon icon="chevron-down" width="20" height="20" /> */}
             </Box>

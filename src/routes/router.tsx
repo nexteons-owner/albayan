@@ -1,9 +1,10 @@
 import { lazy } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, useRouteError } from "react-router-dom";
 // guards
 import AuthGuard from "../global/layouts/guards/authGuard";
 import GuestGuard from "../global/layouts/guards/guestGuard";
 import { getClaimsLoader } from "../modules/dashboard";
+import { resp } from "./testData";
 
 // constants
 import {
@@ -28,7 +29,6 @@ const DashBoardLayout = Loadable(
 
 const Login = Loadable(lazy(() => import("../modules/authentication/Login")));
 const DashBoard = Loadable(lazy(() => import("../modules/dashboard")));
-
 export const router = createBrowserRouter([
   {
     path: PMROOT,
@@ -37,10 +37,6 @@ export const router = createBrowserRouter([
         <Login />
       </GuestGuard>
     ),
-    loader: () => {
-      console.log("GuestGuard Layout");
-      return true;
-    },
   },
   {
     path: PMDASHBOARD,
@@ -51,9 +47,24 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        loader: () => getClaimsLoader(),
+        path: "",
+        element: <Navigate to={PATH_DASHBOARD.dashboard.main} replace />,
+      },
+      {
         path: PFMAIN,
+        errorElement: <ErrorBoundary />,
         element: <DashBoard />,
+        // loader: () => {
+        //   if (resp.status) {
+        //     return { dashBoardList: resp.data.data.dashBoardData || [] };
+        //   } else {
+        //     throw new Response("Network Call Failed", {
+        //       status: 404,
+        //       statusText: resp.msg,
+        //     });
+        //   }
+        // },
+        loader: getClaimsLoader,
       },
     ],
   },
@@ -67,3 +78,9 @@ export const router = createBrowserRouter([
   },
   { path: PFNOLINK, element: <h1>Not Found</h1> },
 ]);
+
+function ErrorBoundary() {
+  let error: any = useRouteError();
+  console.error(error);
+  return <div>Failed{error.statusText}</div>;
+}
