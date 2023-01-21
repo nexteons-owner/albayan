@@ -4,6 +4,7 @@ import { getClaims } from "../../services/user";
 import DashBoardMain from "../../screens/dashboard";
 import { ClaimSummary, ClaimSummaryApi } from "../../screens/dashboard/modals";
 import PageContainer from "../../global/layouts/pageContainer";
+import { Sspiner } from "../../components/customUiControls";
 
 function DashBoard() {
   const dashBoardResp: any = useLoaderData();
@@ -52,7 +53,7 @@ function DashBoard() {
       title="Albayan Dashboard"
       description="Albayan Claims Dashboard"
     >
-      <Suspense fallback={<p>Loading</p>}>
+      <Suspense fallback={<Sspiner />}>
         <DashBoardMain claims={claims} />
       </Suspense>
     </PageContainer>
@@ -74,13 +75,3 @@ export async function getClaimsLoader() {
     });
   }
 }
-// loader: () => {
-//   if (resp.status) {
-//     return { dashBoardList: resp.data.data.dashBoardData || [] };
-//   } else {
-//     throw new Response("Network Call Failed", {
-//       status: 404,
-//       statusText: resp.msg,
-//     });
-//   }
-// },
