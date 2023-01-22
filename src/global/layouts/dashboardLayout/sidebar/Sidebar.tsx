@@ -13,6 +13,8 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
+import { useLocation, useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
 
 import { MinusSquare, PlusSquare, CloseSquare } from "./index";
 import { Menuitems } from "./Menuitems";
@@ -29,41 +31,76 @@ const Sidebar = ({
   onSidebarClose,
   isSidebarOpen,
 }: Props) => {
-  const { user } = useAuth();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const pathDirect = pathname;
+  const pathWithoutLastPart = pathname.includes("/update")
+    ? pathname.slice(0, pathname.lastIndexOf("/update"))
+    : pathname.slice(0, pathname.lastIndexOf("/"));
   const scrollBarRef = useRef<HTMLLIElement>(null);
   const [expandedNode, setExpandedNode] = useState<any>([]);
+
+  const handleNestedArray = (items: string[], filterKeys: string[] = []) => {
+    let nestedFilterKeys = [...filterKeys];
+    items.forEach((childItem: any, index) => {
+      nestedFilterKeys.push(childItem.code);
+      if (childItem.children) {
+        nestedFilterKeys = [
+          ...nestedFilterKeys,
+          ...handleNestedArray(childItem.children, nestedFilterKeys),
+        ];
+      }
+    });
+    return nestedFilterKeys;
+  };
 
   const handleNodeClick = (event: any, node: any) => {
     event.stopPropagation();
     if (!node.children) {
-      console.log("navigate to link");
+      if (node?.href) {
+        navigate(node?.href);
+      }
+      console.log("action");
       return;
     }
-    let newExpandedNode = [...expandedNode];
-    if (expandedNode.includes(node.code)) {
-      newExpandedNode = newExpandedNode.filter((code) => code !== node.code);
-      if (node.children) {
-        node.children.forEach((child: any) => {
-          newExpandedNode = newExpandedNode.filter(
-            (code) => code !== child.code
-          );
-        });
-      }
+    let newExpandedNode = node?.isParent ? [] : [...expandedNode];
+
+    const filterKeys: string[] = node.children
+      ? [...handleNestedArray(node.children)]
+      : [node.code];
+
+    if (
+      node.isParent
+        ? expandedNode.includes(node.code)
+        : expandedNode
+            .map((expandItem: any) => filterKeys.includes(expandItem))
+            .filter((item: boolean) => item).length > 0
+    ) {
+      newExpandedNode = newExpandedNode.filter(
+        (code) => !filterKeys.includes(code)
+      );
+      console.log("removing");
     } else {
+      newExpandedNode.push(node.code);
       if (node.children) {
-        newExpandedNode = newExpandedNode.filter(
-          (code) =>
-            !Menuitems.find((item) => item.code === code && item.children)
-        );
-        newExpandedNode.push(node.code);
         node.children.forEach((child: any) => {
           newExpandedNode.push(child.code);
         });
       }
+      console.log("adding");
     }
-    if (newExpandedNode.length > 0) {
-      setExpandedNode(newExpandedNode);
-    }
+
+    setExpandedNode(newExpandedNode);
+  };
+
+  const isCollapse = (node: any) => {
+    const filterKeys: string[] = [...handleNestedArray(node.children)];
+
+    return (
+      filterKeys
+        .map((item) => expandedNode.includes(item))
+        .filter((item) => item).length > 0
+    );
   };
 
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
@@ -75,20 +112,34 @@ const Sidebar = ({
     return nodes.map((node) => {
       return (
         <React.Fragment key={node.code}>
-          <ListItem button onClick={(event) => handleNodeClick(event, node)}>
-            <ListItemText
-              primary={
-                node.code +
-                "----" +
-                (node?.children ? node?.children?.length : "No children")
-              }
-            />
-          </ListItem>
+          <ListItemButton
+            sx={{
+              mb: 1,
+              borderRadius: 2,
+              ...((node?.isParent && node.children
+                ? pathWithoutLastPart === node.href
+                : pathDirect === node.href) && {
+                color: "white",
+                backgroundColor: (theme) =>
+                  `${theme.palette.primary.main}!important`,
+              }),
+            }}
+          >
+            <ListItem onClick={(event) => handleNodeClick(event, node)}>
+              <ListItemIcon>{node?.icon}</ListItemIcon>
+              <ListItemText primary={node.title} />
+              {node.children &&
+                (isCollapse(node) ? <MinusSquare /> : <PlusSquare />)}
+            </ListItem>
+          </ListItemButton>
           {node.children && (
             <Collapse
               in={
-                expandedNode.includes(node.code) ||
-                (parentCode && expandedNode.includes(parentCode))
+                node.children
+                  ? node.children
+                      .map((item: any) => expandedNode.includes(item.code))
+                      .includes(true)
+                  : expandedNode.includes(node.code)
               }
               timeout="auto"
               unmountOnExit
@@ -106,7 +157,6 @@ const Sidebar = ({
     <Scrollbar ref={scrollBarRef} style={{ height: "calc(100vh - 5px)" }}>
       <Box sx={{ p: 2 }}>
         <Box>
-          {expandedNode}
           <List>{renderTreeNodes(menuItems, null)}</List>
         </Box>
       </Box>

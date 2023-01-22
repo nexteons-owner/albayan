@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate, useRouteError } from "react-router-dom";
 // guards
 import AuthGuard from "../global/layouts/guards/authGuard";
 import GuestGuard from "../global/layouts/guards/guestGuard";
-import { getClaimsLoader } from "../modules/dashboard";
 import { resp } from "./testData";
 
 // constants
@@ -54,26 +53,6 @@ export const router = createBrowserRouter([
         path: PFMAIN,
         errorElement: <ErrorBoundary />,
         element: <DashBoard />,
-        // loader: () => {
-        //   if (resp.status) {
-        //     return { dashBoardList: resp.data.data.dashBoardData || [] };
-        //   } else {
-        //     throw new Response("Network Call Failed", {
-        //       status: 404,
-        //       statusText: resp.msg,
-        //     });
-        //   }
-        // },
-        // loader: getClaimsLoader,
-      },
-      {
-        path: PFMAIN + "2",
-        errorElement: <ErrorBoundary />,
-        element: (
-          <>
-            2<DashBoard />
-          </>
-        ),
         // loader: () => {
         //   if (resp.status) {
         //     return { dashBoardList: resp.data.data.dashBoardData || [] };
