@@ -13,7 +13,7 @@ const SummaryCards = ({ cardList }: Props) => (
   >
     <Grid container spacing={0}>
       {cardList.map((topcard, index) => (
-        <Grid item xs={6} lg={3} sm={3} key={topcard.subtext}>
+        <Grid item xs={12} lg={3} sm={6} key={topcard.subtext}>
           <CardContent
             sx={{
               borderRight: {

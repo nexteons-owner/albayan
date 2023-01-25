@@ -15,6 +15,7 @@ import { toFixedAmount } from "../../global/utils/number";
 import { claimStatusLocal } from "../../global/utils/claims";
 import TopPayers from "../../components/screen/dashboard/TopPayerList";
 import Table from "../../components/screen/dashboard/Table";
+import Chart from "../../components/screen/dashboard/Chart";
 interface Props {
   claims: ClaimSummary[];
 }
@@ -118,6 +119,9 @@ function DashBoard({ claims }: Props) {
           <SummaryCards {...{ cardList }} />
         </Grid>
       </Zoom>
+      <Grid item xs={12}>
+        <Chart />
+      </Grid>
 
       <Zoom in={topList.length > 0}>
         <Grid item xs={12} lg={4}>

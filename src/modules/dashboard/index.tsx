@@ -8,7 +8,6 @@ import PageContainer from "../../global/layouts/pageContainer";
 import { Sspiner } from "../../components/customUiControls";
 
 function DashBoard() {
-  // const dashBoardResp: any = useLoaderData();
   const [claims, setClaims] = useState<ClaimSummary[]>([]);
 
   const {
@@ -17,6 +16,9 @@ function DashBoard() {
     error,
     data: dashBoardResp,
   } = useQuery({
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    refetchOnMount: false,
     queryFn: getClaims,
     queryKey: ["dashboard"],
   });
@@ -71,17 +73,3 @@ function DashBoard() {
 }
 
 export default DashBoard;
-
-// export async function getClaimsLoader() {
-//   const resp = await getClaims();
-//   if (resp.status) {
-//     return defer({
-//       dashBoardList: resp.data?.data?.dashBoardData || [],
-//     });
-//   } else {
-//     throw new Response("Network Call Failed", {
-//       status: 404,
-//       statusText: resp.msg,
-//     });
-//   }
-// }
