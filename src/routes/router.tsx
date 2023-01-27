@@ -15,6 +15,7 @@ import {
   PFNOTFOUND,
   PFNOLINK,
   PFMAIN,
+  PFPAYERS,
 } from "./paths";
 // components
 import Loadable from "../components/loadable";
@@ -28,6 +29,9 @@ const DashBoardLayout = Loadable(
 
 const Login = Loadable(lazy(() => import("../modules/authentication/Login")));
 const DashBoard = Loadable(lazy(() => import("../modules/dashboard")));
+const PayerDashBoard = Loadable(
+  lazy(() => import("../modules/dashboard/payers"))
+);
 export const router = createBrowserRouter([
   {
     path: PMROOT,
@@ -53,17 +57,11 @@ export const router = createBrowserRouter([
         path: PFMAIN,
         errorElement: <ErrorBoundary />,
         element: <DashBoard />,
-        // loader: () => {
-        //   if (resp.status) {
-        //     return { dashBoardList: resp.data.data.dashBoardData || [] };
-        //   } else {
-        //     throw new Response("Network Call Failed", {
-        //       status: 404,
-        //       statusText: resp.msg,
-        //     });
-        //   }
-        // },
-        // loader: getClaimsLoader,
+      },
+      {
+        path: PFPAYERS,
+        errorElement: <ErrorBoundary />,
+        element: <PayerDashBoard />,
       },
     ],
   },

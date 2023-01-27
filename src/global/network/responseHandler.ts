@@ -1,6 +1,6 @@
 import { RESPONSE } from "./responseStatus";
-
-const responseHandler = (res: any) => {
+import { ApiResponse } from "./modal";
+const responseHandler = (res: any): ApiResponse => {
   try {
     if (res && res.status) {
       switch (res.status) {

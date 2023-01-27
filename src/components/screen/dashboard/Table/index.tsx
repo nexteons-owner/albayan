@@ -20,7 +20,7 @@ interface Props {
 }
 const ProductsTable = ({ topList }: Props) => {
   return (
-    <DashboardCard title="PAYERS SUMMARY">
+    <DashboardCard title={`PAYERS SUMMARY (${topList.length})`}>
       <Box
         sx={{
           overflow: {
@@ -78,7 +78,7 @@ const ProductsTable = ({ topList }: Props) => {
                                   : item.totalApprovePerc < 50
                                   ? (theme) => theme.palette.error.main
                                   : (theme) => theme.palette.primary.main,
-                            }
+                            },
                           }}
                         />
                       </Tooltip>

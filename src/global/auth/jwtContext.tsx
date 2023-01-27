@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 
 // utils
 import { setSession, getAuthCredentials } from "./jwt";
-import { getUserByToken, login as loginService } from "../../services/user";
+import { getUserByToken, login as loginService } from "../../repository/user";
 
 const initialState: state = {
   isAuthenticated: false,

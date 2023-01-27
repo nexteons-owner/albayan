@@ -48,7 +48,7 @@ export async function getClaims() {
     sortType: 0,
     sortOrder: 0,
     statusArray: [],
-    screenType: [],
+    screenType: [3, 6],
     searchingText: "",
     responseFormat: [],
     limit: 0,
@@ -63,6 +63,7 @@ export async function getClaims() {
         config
       )
     );
+    console.log(response);
     return response;
   } catch (error) {
     return responseHandler(error);

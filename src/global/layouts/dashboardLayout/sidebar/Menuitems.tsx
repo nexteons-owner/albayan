@@ -8,6 +8,13 @@ export const Menuitems: any[] = [
     code: `${crypto.randomUUID()}`,
     isParent: true,
   },
+  {
+    title: "PAYERS",
+    icon: <Dashboard width="15" height="15" />,
+    href: PATH_DASHBOARD.dashboard.payers,
+    code: `${crypto.randomUUID()}`,
+    isParent: true,
+  },
 
   // {
   //   title: "Customers",

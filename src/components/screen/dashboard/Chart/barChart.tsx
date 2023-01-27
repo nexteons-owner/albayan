@@ -1,21 +1,13 @@
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  LinearProgress,
-  Tooltip,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import Chart from "react-apexcharts";
 import WidgetCard from "../../../Card/WidgetCard";
-import { TopListModel } from "../modals";
+import { DenialCodeSummary } from "../../../../screens/dashboard/modals";
 
-// interface Props {
-//   topList: TopListModel[];
-//   title: string;
-// }
-
-const Visits = () => {
+interface Props {
+  topList: DenialCodeSummary[];
+  title: string;
+}
+const Visits = ({ topList, title }: Props) => {
   const optionscolumnchart = {
     chart: {
       id: "column-chart",
@@ -42,17 +34,7 @@ const Visits = () => {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: [
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-      ],
+      categories: topList.map(({ denialCode }) => denialCode),
     },
     yaxis: {
       title: {
@@ -79,35 +61,15 @@ const Visits = () => {
   };
   const seriescolumnchart = [
     {
-      name: "Desktop",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Mobile",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-    {
-      name: "Other",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-    {
-      name: "Other",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-    {
-      name: "Desktop",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Mobile",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
+      name: "Inflation",
+      data: topList.map(({ count }) => count),
     },
   ];
   return (
     <Card>
       <Box p={2} display="flex" alignItems="center">
         <Box flexGrow={1}>
-          <Typography variant="h4">Column Charts</Typography>
+          <Typography variant="h4">{title}</Typography>
         </Box>
       </Box>
       <CardContent>

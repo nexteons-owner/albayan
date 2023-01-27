@@ -17,6 +17,7 @@ export const PMDASHBOARD = "dashboard";
 export const PFNOLINK = "*";
 export const PFNOTFOUND = "404";
 export const PFMAIN = "main";
+export const PFPAYERS = "payers";
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,8 @@ export const PATH_AUTH = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   dashboard: {
-    main: path(ROOTS_DASHBOARD, "/main"),
+    main: path(ROOTS_DASHBOARD, "/" + PFMAIN),
+    payers: path(ROOTS_DASHBOARD, "/" + PFPAYERS),
   },
 };
 // ----------------------------------------------------------------------
