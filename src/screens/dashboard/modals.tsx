@@ -36,6 +36,7 @@ export interface ClaimSummaryApi {
 }
 export interface ActivityDetails {
   activityCode: string;
+  activityType: number;
   activityDescription: string;
   activityNet: number;
   activityApproved: number;
@@ -64,6 +65,11 @@ export interface ActivityTypesApi {
   _activityTypeDescription: string;
 }
 
+export interface ActivityCodes {
+  activityCode: string;
+  activityDescription: string;
+}
+
 export interface ActivityTypes {
   activityType: number;
   activityTypeDescription: string;
@@ -81,5 +87,28 @@ export interface DenialCodes {
 export interface DenialCodeSummary {
   denialCode: string;
   denialCodeDescription: string;
+  totalClaimAmount: number;
+  totalRejectAmount: number;
+  count: number;
+}
+
+export interface ActivityTypeSummary {
+  activityType: number;
+  activityTypeDescription: string;
+  totalClaimAmount: number;
+  totalRejectAmount: number;
+  count: number;
+}
+
+export interface ActivityCodeSummary {
+  activityCode: string;
+  activityDescription: string;
+  totalClaimAmount: number;
+  totalRejectAmount: number;
+  count: number;
+}
+export interface BarChart {
+  code: string | number;
+  description: string;
   count: number;
 }

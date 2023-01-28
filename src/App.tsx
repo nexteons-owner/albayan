@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import "./app.css";
 
 import useAuth from "./global/auth/useAuth";
 import { RouterProvider } from "react-router-dom";

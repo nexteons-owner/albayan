@@ -8,6 +8,7 @@ import {
   DenialCodesApi,
   ActivityTypes,
   ActivityTypesApi,
+  ActivityCodes,
 } from "../../screens/dashboard/modals";
 import { getActivityStatus } from "../../global/utils/claims";
 
@@ -29,6 +30,7 @@ export async function getClaims(): Promise<GetClaims> {
       dashBoardResp?.data?.data?.activityDetails || [];
     const denialCodesList = dashBoardResp?.data?.data?.denialCodes || [];
     const activityTypesList = dashBoardResp?.data?.data?.activityTypes || [];
+    const activityCodesList: ActivityCodes[] = [];
 
     const formatedActivityDetails: ActivityDetails[] = activityDetailsList?.map(
       ({
@@ -40,6 +42,7 @@ export async function getClaims(): Promise<GetClaims> {
         _clinicianCode: clinicianCode,
         _clinicianDescription: clinicianName,
         _linkId: linkId,
+        _activityType: activityType,
       }: ActivityDetailsApi) => {
         const isProcessed = denialCode !== "" || activityApproved > 0;
         const item: ActivityDetails = {
@@ -58,7 +61,9 @@ export async function getClaims(): Promise<GetClaims> {
             denialCode,
             activityNet
           ),
+          activityType,
         };
+        activityCodesList.push({ activityCode, activityDescription });
         return item;
       }
     );
@@ -123,6 +128,11 @@ export async function getClaims(): Promise<GetClaims> {
         claims: formatedClaims,
         denailList: formatedDenailCodesList,
         activityTypeList: formatedActivityTypesList,
+        activityCodesList: [
+          ...new Map(
+            activityCodesList.map((item) => [item.activityCode, item])
+          ).values(),
+        ],
       },
       msg: "",
     };

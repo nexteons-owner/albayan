@@ -1,6 +1,14 @@
 import { toFixedAmount } from "../../global/utils/number";
 import { claimStatusLocal } from "../../global/utils/claims";
-import { ClaimSummary, DenialCodes, DenialCodeSummary } from "./modals";
+import {
+  ClaimSummary,
+  DenialCodes,
+  DenialCodeSummary,
+  ActivityTypes,
+  ActivityTypeSummary,
+  ActivityCodeSummary,
+  ActivityCodes,
+} from "./modals";
 import { TopListModel } from "../../components/screen/dashboard/modals";
 
 export function PayersWiseClaims(claims: ClaimSummary[]): TopListModel[] {
@@ -152,22 +160,126 @@ export function TotalClaimSummary(claims: ClaimSummary[]) {
 
 export function DenialWiseClaimSummary(
   claims: ClaimSummary[],
-  denailCodeList: DenialCodes[]
+  denailCodeList: DenialCodes[],
+  payersList: string[] = [],
+  clinicianList: string[] = []
 ): DenialCodeSummary[] {
+  let cpyClaims = [...claims];
+  if (payersList?.length > 0) {
+    cpyClaims = cpyClaims.filter(({ payerCode }) =>
+      payersList.includes(payerCode)
+    );
+  }
+  if (clinicianList?.length > 0) {
+    cpyClaims = cpyClaims.filter(({ activityArray }) => {
+      const clinicianCodes = activityArray.map(
+        ({ clinicianCode }) => clinicianCode
+      );
+      return clinicianCodes.some((r) => clinicianList.indexOf(r) >= 0);
+    });
+  }
   return denailCodeList.map(
-    ({
-      denialCode: parentDenialCode,
-      denialCodeDescription,
-    }): DenialCodeSummary => {
+    ({ denialCode: denialCode, denialCodeDescription }): DenialCodeSummary => {
       let count = 0;
-      claims.forEach(({ activityArray }) => {
-        activityArray.forEach(({ denialCode }) => {
-          if (denialCode === parentDenialCode) {
-            count++;
+      let totalClaimAmount = 0;
+      let totalRejectAmount = 0;
+      cpyClaims.forEach(({ activityArray }) => {
+        activityArray.forEach(
+          ({
+            denialCode: childDenialCode,
+            activityNet,
+            activityApproved,
+            isProcessed,
+          }) => {
+            if (childDenialCode === denialCode) {
+              if (isProcessed) {
+                count++;
+                totalClaimAmount += activityNet;
+                totalRejectAmount += activityNet - activityApproved;
+              }
+            }
           }
-        });
+        );
       });
-      return { denialCode: parentDenialCode, denialCodeDescription, count };
+      return {
+        denialCode,
+        denialCodeDescription,
+        count,
+        totalClaimAmount: toFixedAmount(totalClaimAmount),
+        totalRejectAmount: toFixedAmount(totalRejectAmount),
+      };
     }
   );
+}
+
+export function ActivityTypeClaimSummary(
+  claims: ClaimSummary[],
+  activityTypeList: ActivityTypes[]
+): ActivityTypeSummary[] {
+  return activityTypeList.map(({ activityType, activityTypeDescription }) => {
+    let count = 0;
+    let totalClaimAmount = 0;
+    let totalRejectAmount = 0;
+    claims.forEach(({ activityArray }) => {
+      activityArray.forEach(
+        ({
+          activityType: childActivityType,
+          isProcessed,
+          activityNet,
+          activityApproved,
+        }) => {
+          if (childActivityType === activityType) {
+            if (isProcessed) {
+              count++;
+              totalClaimAmount += activityNet;
+              totalRejectAmount += activityNet - activityApproved;
+            }
+          }
+        }
+      );
+    });
+    return {
+      activityType,
+      activityTypeDescription,
+      count,
+      totalClaimAmount: toFixedAmount(totalClaimAmount),
+      totalRejectAmount: toFixedAmount(totalRejectAmount),
+    };
+  });
+}
+
+export function ActivityCodeClaimSummary(
+  claims: ClaimSummary[],
+  activityCodesList: ActivityCodes[]
+): ActivityCodeSummary[] {
+  return activityCodesList.map(({ activityCode, activityDescription }) => {
+    let count = 0;
+    let totalClaimAmount = 0;
+    let totalRejectAmount = 0;
+    claims.forEach(({ activityArray }) => {
+      activityArray.forEach(
+        ({
+          activityCode: childActivityCode,
+          isProcessed,
+          activityNet,
+          activityApproved,
+        }) => {
+          if (childActivityCode === activityCode) {
+            if (isProcessed) {
+              count++;
+              totalClaimAmount += activityNet;
+              totalRejectAmount += activityNet - activityApproved;
+            }
+          }
+        }
+      );
+    });
+    return {
+      activityCode,
+      activityDescription,
+      count,
+      totalClaimAmount: toFixedAmount(totalClaimAmount),
+      totalRejectAmount: toFixedAmount(totalRejectAmount),
+    };
+  });
 }

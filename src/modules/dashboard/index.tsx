@@ -3,15 +3,17 @@ import { useQuery } from "react-query";
 // import { useLoaderData, defer } from "react-router-dom";
 import { getClaims } from "../../useCase/dashboard";
 import DashBoardMain from "../../screens/dashboard";
-import { ClaimSummary, DenialCodes } from "../../screens/dashboard/modals";
+import {
+  ClaimSummary,
+  DenialCodes,
+  ActivityTypes,
+  ActivityCodes,
+} from "../../screens/dashboard/modals";
 import PageContainer from "../../global/layouts/pageContainer";
 import { Sspiner } from "../../components/customUiControls";
 
 function DashBoard() {
-  const [claims, setClaims] = useState<ClaimSummary[]>([]);
-  const [denialList, setDenialList] = useState<DenialCodes[]>([]);
-
-  const { isLoading, data: dashBoardResp } = useQuery({
+  const { isLoading } = useQuery({
     refetchOnWindowFocus: false,
     staleTime: Infinity,
     refetchOnMount: false,
@@ -19,25 +21,12 @@ function DashBoard() {
     queryKey: ["dashboard"],
   });
 
-  useEffect(() => {
-    if (dashBoardResp?.status) {
-      const claimsList = dashBoardResp?.data?.claims || [];
-      const denailList = dashBoardResp?.data?.denailList || [];
-      setClaims(claimsList);
-      setDenialList(denailList);
-    }
-  }, [dashBoardResp]);
-
   return (
     <PageContainer
       title="Albayan Dashboard"
       description="Albayan Claims Dashboard"
     >
-      {isLoading ? (
-        <Sspiner />
-      ) : (
-        <DashBoardMain claims={claims} denialList={denialList} />
-      )}
+      {isLoading ? <Sspiner /> : <DashBoardMain />}
     </PageContainer>
   );
 }

@@ -1,28 +1,41 @@
 import { Box, Typography, Card, CardContent } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Chart from "react-apexcharts";
 import WidgetCard from "../../../Card/WidgetCard";
-import { DenialCodeSummary } from "../../../../screens/dashboard/modals";
+import { BarChart } from "../../../../screens/dashboard/modals";
 
 interface Props {
-  topList: DenialCodeSummary[];
+  topList: BarChart[];
   title: string;
 }
 const Visits = ({ topList, title }: Props) => {
+  const theme = useTheme();
+  const primary = theme.palette.primary.main;
   const optionscolumnchart = {
+    grid: {
+      show: true,
+      borderColor: "transparent",
+      strokeDashArray: 2,
+      padding: {
+        left: 0,
+        right: 0,
+        bottom: -13,
+      },
+    },
     chart: {
-      id: "column-chart",
-      fontFamily: "'DM Sans', sans-serif",
-      foreColor: "#adb0bb",
       toolbar: {
         show: false,
       },
+      foreColor: "#adb0bb",
+      fontFamily: "'DM Sans',sans-serif",
     },
-    colors: ["#6ac3fd", "#0b70fb", "#f64e60"],
+    colors: [primary],
     plotOptions: {
       bar: {
         horizontal: false,
+        columnWidth: "42%",
         endingShape: "rounded",
-        columnWidth: "20%",
+        borderRadius: 5,
       },
     },
     dataLabels: {
@@ -30,39 +43,68 @@ const Visits = ({ topList, title }: Props) => {
     },
     stroke: {
       show: true,
-      width: 2,
+      width: 5,
       colors: ["transparent"],
     },
     xaxis: {
-      categories: topList.map(({ denialCode }) => denialCode),
+      categories: topList.map(({ code }) => code),
+      labels: {
+        style: {
+          cssClass: "grey--text lighten-2--text fill-color",
+        },
+      },
     },
     yaxis: {
       title: {
-        text: "$ (thousands)",
+        text: "",
       },
     },
     fill: {
+      type: "solid",
       opacity: 1,
     },
     tooltip: {
       y: {
-        formatter(val: any) {
-          return `$ ${val} thousands`;
+        formatter: function (
+          value: any,
+          { series, seriesIndex, dataPointIndex, w }: any
+        ) {
+          const desc = topList[dataPointIndex].description || "";
+          return desc + "<br/>" + value;
         },
       },
+      // custom: function (opts: any) {
+      //   const desc = topList[opts.dataPointIndex].description || "";
+      //   const value = opts.series[opts.seriesIndex][opts.dataPointIndex];
+      //   return (
+      //     '<div style={{ margin: "10px" }}>' +
+      //     "<span>" +
+      //     desc +
+      //     "</br>" +
+      //     value +
+      //     "</span>" +
+      //     "</div>"
+      //   );
+      // },
       theme: "dark",
+      fixed: {
+        enabled: false,
+        position: "bottomLeft",
+        offsetX: 0,
+        offsetY: 0,
+      },
     },
-    grid: {
-      show: false,
+    markers: {
+      size: 0,
     },
     legend: {
-      show: true,
+      show: false,
     },
   };
   const seriescolumnchart = [
     {
-      name: "Inflation",
-      data: topList.map(({ count }) => count),
+      name: "",
+      data: topList.map(({ count, description }) => count),
     },
   ];
   return (
@@ -77,7 +119,7 @@ const Visits = ({ topList, title }: Props) => {
           options={optionscolumnchart}
           series={seriescolumnchart}
           type="bar"
-          height="300px"
+          height="350px"
         />
       </CardContent>
     </Card>

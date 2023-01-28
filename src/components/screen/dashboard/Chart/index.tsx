@@ -7,113 +7,103 @@ import {
   Tooltip,
 } from "@mui/material";
 import Chart from "react-apexcharts";
+import { useTheme } from "@mui/material/styles";
+import { ApexOptions } from "apexcharts";
 import WidgetCard from "../../../Card/WidgetCard";
 import { TopListModel } from "../modals";
 
-// interface Props {
-//   topList: TopListModel[];
-//   title: string;
-// }
+interface Props {
+  data: GroupedData;
+  title: string;
+}
+interface GroupedData {
+  list: GroupedBarChart[];
+  xAxis: string[];
+}
+interface GroupedBarChart {
+  name: string;
+  data: number[];
+}
 
-const Visits = () => {
-  const optionscolumnchart = {
-    chart: {
-      id: "column-chart",
-      fontFamily: "'DM Sans', sans-serif",
-      foreColor: "#adb0bb",
-      toolbar: {
-        show: false,
+const Visits = ({ data, title }: Props) => {
+  const theme = useTheme();
+  const primary = theme.palette.primary.main;
+  const secondary = theme.palette.secondary.main;
+
+  const optionssalesoverview: ApexOptions = {
+    grid: {
+      show: true,
+      borderColor: "transparent",
+      strokeDashArray: 2,
+      padding: {
+        left: 0,
+        right: 0,
+        bottom: -13,
       },
     },
-    colors: ["#6ac3fd", "#0b70fb", "#f64e60"],
     plotOptions: {
       bar: {
         horizontal: false,
-        endingShape: "rounded",
-        columnWidth: "20%",
+        columnWidth: "42%",
+        borderRadius: 5,
       },
+    },
+
+    colors: [primary, secondary],
+    fill: {
+      type: "solid",
+      opacity: 1,
+    },
+    chart: {
+      toolbar: {
+        show: false,
+      },
+      foreColor: "#adb0bb",
+      fontFamily: "'DM Sans',sans-serif",
     },
     dataLabels: {
       enabled: false,
     },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      categories: [
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-      ],
-    },
-    yaxis: {
-      title: {
-        text: "$ (thousands)",
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter(val: any) {
-          return `$ ${val} thousands`;
-        },
-      },
-      theme: "dark",
-    },
-    grid: {
-      show: false,
+    markers: {
+      size: 0,
     },
     legend: {
+      show: false,
+    },
+    xaxis: {
+      type: "category",
+      categories: data.xAxis.map((item) => item),
+      labels: {
+        style: {
+          cssClass: "grey--text lighten-2--text fill-color",
+        },
+      },
+    },
+    yaxis: {
       show: true,
+      tickAmount: 3,
+    },
+    stroke: {
+      show: true,
+      width: 5,
+      lineCap: "butt",
+      colors: ["transparent"],
+    },
+    tooltip: {
+      theme: "dark",
     },
   };
-  const seriescolumnchart = [
-    {
-      name: "Desktop",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Mobile",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-    {
-      name: "Other",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-    {
-      name: "Other",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-    {
-      name: "Desktop",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Mobile",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-  ];
   return (
     <Card>
       <Box p={2} display="flex" alignItems="center">
         <Box flexGrow={1}>
-          <Typography variant="h4">Column Charts</Typography>
+          <Typography variant="h4">{title}</Typography>
         </Box>
       </Box>
       <CardContent>
         <Chart
-          options={optionscolumnchart}
-          series={seriescolumnchart}
+          options={optionssalesoverview}
+          series={data.list}
           type="bar"
           height="300px"
         />
