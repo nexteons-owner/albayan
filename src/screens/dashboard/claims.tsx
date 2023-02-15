@@ -2,7 +2,7 @@ import { Grid, Slide } from "@mui/material";
 import { ClaimSummary } from "./modals";
 import { TopListModel } from "../../components/screen/dashboard/modals";
 import { PayersWiseClaims } from "./controller";
-import Table from "../../components/screen/dashboard/Table/payers";
+import Table from "../../components/screen/dashboard/Table/claims";
 interface Props {
   claims: ClaimSummary[];
 }

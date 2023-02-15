@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Dashboard, Payments, Google } from "@mui/icons-material";
+import { Dashboard, Payments, RequestQuote } from "@mui/icons-material";
 import { PATH_DASHBOARD } from "../../../../routes/paths";
 
 export const Menuitems: any[] = [
@@ -14,6 +14,13 @@ export const Menuitems: any[] = [
     title: "PAYERS",
     icon: <Payments width="15" height="15" />,
     href: PATH_DASHBOARD.dashboard.payers,
+    code: `${uuidv4()}`,
+    isParent: true,
+  },
+  {
+    title: "CLAIMS",
+    icon: <RequestQuote width="15" height="15" />,
+    href: PATH_DASHBOARD.dashboard.claims,
     code: `${uuidv4()}`,
     isParent: true,
   },

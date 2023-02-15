@@ -18,6 +18,7 @@ export const PFNOLINK = "*";
 export const PFNOTFOUND = "404";
 export const PFMAIN = "main";
 export const PFPAYERS = "payers";
+export const PFCLAIMS = "claims";
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export const PATH_DASHBOARD = {
   dashboard: {
     main: path(ROOTS_DASHBOARD, "/" + PFMAIN),
     payers: path(ROOTS_DASHBOARD, "/" + PFPAYERS),
+    claims: path(ROOTS_DASHBOARD, "/" + PFCLAIMS),
   },
 };
 // ----------------------------------------------------------------------

@@ -16,6 +16,7 @@ import {
   PFNOLINK,
   PFMAIN,
   PFPAYERS,
+  PFCLAIMS,
 } from "./paths";
 // components
 import Loadable from "../components/loadable";
@@ -31,6 +32,9 @@ const Login = Loadable(lazy(() => import("../modules/authentication/Login")));
 const DashBoard = Loadable(lazy(() => import("../modules/dashboard")));
 const PayerDashBoard = Loadable(
   lazy(() => import("../modules/dashboard/payers"))
+);
+const ClaimsDashBoard = Loadable(
+  lazy(() => import("../modules/dashboard/claims"))
 );
 export const router = createBrowserRouter([
   {
@@ -62,6 +66,12 @@ export const router = createBrowserRouter([
         path: PFPAYERS,
         errorElement: <ErrorBoundary />,
         element: <PayerDashBoard />,
+      },
+
+      {
+        path: PFCLAIMS,
+        errorElement: <ErrorBoundary />,
+        element: <ClaimsDashBoard />,
       },
     ],
   },

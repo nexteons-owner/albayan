@@ -1,1 +1,1 @@
-export const AUTH_CRED = 'ayka_cookie_jwt';
+export const AUTH_CRED = 'albayan_cookie_jwt';

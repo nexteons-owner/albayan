@@ -118,13 +118,10 @@ function AuthProvider({ children }: any): any {
     initialize();
   }, []);
   const login = async (mobile: string, password: string) => {
-    console.log("asdasd");
     const response = await mutateAsync({
       email: mobile,
       password,
     });
-    console.log("This was an async mutation!");
-    console.log("newUser: ", response);
 
     if (!response.status) {
       return response;
