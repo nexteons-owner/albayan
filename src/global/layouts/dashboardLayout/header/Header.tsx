@@ -13,6 +13,12 @@ import {
   Button,
   Drawer,
 } from "@mui/material";
+import {
+  Dashboard,
+  Payments,
+  Dehaze,
+  ArrowDropDown,
+} from "@mui/icons-material";
 import PropTypes from "prop-types";
 import useAuth from "../../../auth/useAuth";
 
@@ -92,7 +98,7 @@ const Header = ({
             },
           }}
         >
-          {/* <FeatherIcon icon="menu" /> */}
+          <Dehaze width="15" height="15" />
         </IconButton>
 
         <IconButton
@@ -107,7 +113,7 @@ const Header = ({
             },
           }}
         >
-          {/* <FeatherIcon icon="menu" width="20" height="20" /> */}
+          <Dehaze width="15" height="15" />
         </IconButton>
         {/* ------------------------------------------- */}
         {/* Search Dropdown */}
@@ -443,7 +449,7 @@ const Header = ({
               >
                 {user?.name}
               </Typography>
-              {/* <FeatherIcon icon="chevron-down" width="20" height="20" /> */}
+              <ArrowDropDown width="15" height="15" />
             </Box>
           </Box>
         </Button>
@@ -475,13 +481,6 @@ const Header = ({
               </Typography>
             </Box>
           </Box>
-
-          {/* <Link
-            style={{
-              textDecoration: "none",
-            }}
-            to="/auth/login"
-          > */}
           <Button
             sx={{
               mt: 2,
@@ -494,7 +493,6 @@ const Header = ({
           >
             Logout
           </Button>
-          {/* </Link> */}
         </Menu>
       </Toolbar>
     </AppBar>
